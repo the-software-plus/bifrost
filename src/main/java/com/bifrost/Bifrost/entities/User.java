@@ -1,9 +1,11 @@
 package com.bifrost.Bifrost.entities;
 
+import com.bifrost.Bifrost.controller.dto.LoginRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
 import java.util.UUID;
@@ -35,18 +37,7 @@ public class User {
     )
     private Set<Role> roles;
 
-    public enum Values {
-        ADMIN(1L),
-        BASIC(2L);
-
-        Long roleId;
-
-        Values(Long roleId) {
-            this.roleId = roleId;
-        }
-
-        public Long getRoleId() {
-            return roleId;
-        }
+    public boolean isPasswordCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(loginRequest.password(), this.password);
     }
 }
