@@ -4,7 +4,6 @@ import com.bifrost.Bifrost.controller.dto.LoginRequest;
 import com.bifrost.Bifrost.controller.dto.LoginResponse;
 import com.bifrost.Bifrost.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -36,7 +35,9 @@ public class TokenController {
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest requestBody) {
         var user = userRepository.findByEmail(requestBody.email());
 
-        if (user.isEmpty() || user.get().isPasswordCorrect(requestBody, bCryptPasswordEncoder)) throw new BadCredentialsException("Credential not valid");
+        if (user.isEmpty() || !user.get().isPasswordCorrect(requestBody, bCryptPasswordEncoder)) {
+            throw new BadCredentialsException("Credential not valid");
+        }
 
         Instant now = Instant.now();
         Long expiresIn = 300L;
