@@ -40,7 +40,7 @@ public class TokenController {
         }
 
         Instant now = Instant.now();
-        Long expiresIn = 300L;
+        Long expiresIn = 3000L;
 
         var claims = JwtClaimsSet.builder()
                 .issuer("bifrost")
